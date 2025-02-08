@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 const Home = () => {
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col px-5">
         <div className="bg-Background-Home w-auto h-screen flex items-center justify-center flex-col gap-7">
           <h1 className="text-5xl">
             Take Your Career to the Next Level with{" "}

@@ -345,7 +345,7 @@ const ProjectSubmission = () => {
           >
             {isProcessingPayment ? "Processing..." : "Proceed to Payment and Submit"}
           </button>
-          <p>After successful payment please wait for few second to get confirmed...</p>
+          <p className="text-xl">After successful payment please wait for few second to get confirmed...</p>
         </div>
 
         {/* <div className="text-right">
