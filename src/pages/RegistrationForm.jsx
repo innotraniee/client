@@ -19,6 +19,7 @@ function RegistrationForm() {
 
   const [errors, setErrors] = useState({});
   const [formMessage, setFormMessage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -56,6 +57,7 @@ function RegistrationForm() {
     e.preventDefault();
     setFormMessage(null);
     if (!validate()) return;
+    setIsSubmitting(true);
 
     try {
       const response = await fetch(`${BaseUrl}form`, {
@@ -88,6 +90,7 @@ function RegistrationForm() {
         setTimeout(() => {
           navigate("/");
         }, 3000);
+        setIsSubmitting(false);
       } else {
         const errorData = await response.json();
 
@@ -314,8 +317,9 @@ function RegistrationForm() {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white font-medium py-2 rounded"
+          disabled={isSubmitting}
         >
-          Submit
+          {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
     </div>
