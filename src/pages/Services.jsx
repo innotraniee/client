@@ -4,15 +4,15 @@ import { Link } from "react-router";
 const Services = () => {
   return (
     <>
-      <div className="px-10 md:px-32">
-        <div className="flex flex-col p-10 md:px-30">
+      <div className="px-5 md:px-32">
+        <div className="flex flex-col p-5 md:px-30">
           <div className="flex flex-col ">
             <h1 className="text-4xl font-bold mb-10 self-center">
               We Provide All Exclusive services For Clients
             </h1>
             <div className="flex items-center justify-center gap-10 flex-col md:flex-row">
               <img
-                className="size-2/3 md:size-2/5"
+                className="size-3/4 md:size-2/5"
                 src="https://img.freepik.com/free-vector/usability-testing-concept-illustration_114360-1592.jpg"
                 alt="img"
               />
@@ -38,7 +38,7 @@ const Services = () => {
             <hr />
             <div className="flex items-center justify-center gap-10 flex-col md:flex-row">
               <img
-                className="size-2/3 md:size-2/5"
+                className="size-3/4 md:size-2/5"
                 src="https://img.freepik.com/free-vector/social-media-marketing-mobile-phone-concept_23-2148431747.jpg"
                 alt="img"
               />
@@ -64,7 +64,7 @@ const Services = () => {
             </div>
             <div className="flex items-center justify-center gap-10 flex-col md:flex-row-reverse">
               <img
-                className="size-2/3 md:size-2/5"
+                className="size-3/4 md:size-2/5"
                 src="https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg"
                 alt="img"
               />
@@ -89,7 +89,7 @@ const Services = () => {
             </div>
             <div className="flex items-center justify-center gap-10 flex-col md:flex-row">
               <img
-                className="size-2/3 md:size-2/5"
+                className="size-3/4 md:size-2/5"
                 src="https://img.freepik.com/free-vector/app-development-concept-illustration_114360-5110.jpg"
                 alt="img"
               />
@@ -112,7 +112,7 @@ const Services = () => {
             </div>
             <div className="flex items-center justify-center gap-10 flex-col md:flex-row-reverse">
               <img
-                className="size-2/3 md:size-2/5"
+                className="size-3/4 md:size-2/5"
                 src="https://img.freepik.com/premium-vector/people-creating-together-new-app_23-2148683053.jpg"
                 alt="img"
               />

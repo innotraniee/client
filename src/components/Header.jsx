@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import PingAnimation from "./PingAnimation";
 
 const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,10 +14,14 @@ const Header = () => {
       <div className="flex h-24 items-center justify-around px-4 md:px-10">
         <Link to="/">
           <div className="flex items-center">
-            <img src="/innoTraniee.svg" alt="logo" className="h-20 m-3" />
+            <img
+              src="/innoTraniee.svg"
+              alt="logo"
+              className="h-16 md:h-20 m-3"
+            />
             <div>
-              <h1 className="text-3xl font-bold">InnoTraniee</h1>
-              <p>Code with confidence</p>
+              <h1 className="text-2xl md:text-3xl font-bold">InnoTraniee</h1>
+              <p className="text-sm md:text-lg">Code with confidence</p>
             </div>
           </div>
         </Link>
@@ -28,8 +33,9 @@ const Header = () => {
             <li>
               <Link to="/services">Services</Link>
             </li>
-            <li>
+            <li className="relative">
               <Link to="/internships">Internships</Link>
+              <PingAnimation/>
             </li>
             <li>
               <Link to="/verification">Verification</Link>
@@ -42,7 +48,7 @@ const Header = () => {
             </li>
           </ul>
         </div>
-        <div className="md:hidden">
+        <div className="md:hidden ">
           <button onClick={toggleMobileMenu}>
             {isMobileMenuOpen ? (
               <svg

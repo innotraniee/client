@@ -3,22 +3,24 @@ import Contact from "./Contact";
 import Internship from "./Internship";
 import Service from "./Services";
 import { Button } from "@/components/ui/button";
+import PingAnimation from "../components/PingAnimation"
 
 const Home = () => {
   return (
     <>
-      <div className="flex flex-col px-5">
-        <div className="bg-Background-Home w-auto h-screen flex items-center justify-center flex-col gap-7">
+      <div className="flex flex-col">
+        <div className="bg-Background-Home bg-center w-auto h-screen flex items-center justify-center flex-col gap-7 px-5">
           <h1 className="text-5xl">
             Take Your Career to the Next Level with{" "}
             <span className="font-extrabold">InnoTraniee</span>
           </h1>
           <h3 className="text-3xl"> Join Exciting Internship Journey</h3>
-          <Link to="/register" className="text-white">
+          <Link to="/register" className="text-white relative">
             <Button>Apply</Button>
+            <PingAnimation/>
           </Link>
         </div>
-        <div className="flex flex-col gap-5 my-7 px-10 md:px-40 ">
+        <div className="flex flex-col gap-5 my-7 px-5 md:px-40 ">
           <h2 className="text-4xl font-semibold self-center">Who we are</h2>
           <p>
             <span className="font-bold">InnoTraniee</span> are IT services and
@@ -38,10 +40,10 @@ const Home = () => {
         <div className="my-5">
           <Service />
         </div>
-        <div className="px-10 md:px-20 my-5">
+        <div className="px-5 md:px-20 my-5">
           <Internship />
         </div>
-        <div className="flex flex-col px-10 md:px-40 my-10 gap-5 ">
+        <div className="flex flex-col px-5 md:px-40 my-10 gap-5 ">
           <h1 className="text-4xl font-semibold self-center">Our Features</h1>
           <div className="flex flex-wrap justify-center items-center">
             <div className="flex flex-col w-3/5 md:w-2/5 h-auto shadow-lg p-4 m-5 items-center justify-center gap-3">
@@ -74,7 +76,7 @@ const Home = () => {
             </div>
           </div>
           <div className="flex flex-wrap justify-center mt-14 items-center gap-10 flex-col md:flex-row">
-            <div className="flex flex-col w-3/5 md:w-1/5 h-auto md:h-44 max-h-48 gap-3 items-center justify-center shadow-xl p-5 bg-[#EDD1E0] rounded-xl hover:-translate-y-1 hover:shadow-2xl transition-all ">
+            <div className="flex flex-col w-3/4 md:w-1/5 h-auto md:h-44 max-h-48 gap-3 items-center justify-center shadow-xl p-5 bg-[#EDD1E0] rounded-xl hover:-translate-y-1 hover:shadow-2xl transition-all ">
               <h2 className="text-lg font-bold">Simplified Internships</h2>
               <p className="leading-none text-justify">
                 Explore virtual internships in Web Dev, App Dev, Full Stack,
@@ -82,21 +84,21 @@ const Home = () => {
               </p>
             </div>
 
-            <div className="flex flex-col w-3/5 md:w-1/5 h-auto md:h-44 max-h-48 gap-3 items-center justify-center shadow-xl p-5 bg-[#F8ECD7] rounded-xl hover:-translate-y-1 hover:shadow-2xl transition-all ">
+            <div className="flex flex-col w-3/4 md:w-1/5 h-auto md:h-44 max-h-48 gap-3 items-center justify-center shadow-xl p-5 bg-[#F8ECD7] rounded-xl hover:-translate-y-1 hover:shadow-2xl transition-all ">
               <h2 className="text-lg font-bold">Building Student Trust</h2>
               <p className="leading-none text-justify">
                 We ensure your success and build a trusted platform for valuable
                 learning experiences.
               </p>
             </div>
-            <div className="flex flex-col w-3/5 md:w-1/5 h-auto md:h-44 max-h-48 gap-3 items-center justify-center shadow-xl p-5 bg-[#F1EFF0] rounded-xl hover:-translate-y-1 hover:shadow-2xl transition-all ">
+            <div className="flex flex-col w-3/4 md:w-1/5 h-auto md:h-44 max-h-48 gap-3 items-center justify-center shadow-xl p-5 bg-[#F1EFF0] rounded-xl hover:-translate-y-1 hover:shadow-2xl transition-all ">
               <h2 className="text-lg font-bold">Build Your Network</h2>
               <p className="leading-none text-justify">
                 We believe in networking to connect with other interns who are
                 interested in the same things.
               </p>
             </div>
-            <div className="flex flex-col w-3/5 md:w-1/5 h-auto md:h-44 max-h-48 gap-3 items-center justify-center shadow-xl p-5 bg-[#fff] rounded-xl hover:-translate-y-1 hover:shadow-2xl transition-all ">
+            <div className="flex flex-col w-3/4 md:w-1/5 h-auto md:h-44 max-h-48 gap-3 items-center justify-center shadow-xl p-5 bg-[#fff] rounded-xl hover:-translate-y-1 hover:shadow-2xl transition-all ">
               <h2 className="text-lg font-bold">Structured Learning</h2>
               <p className="leading-none text-justify">
                 Enjoy growth-oriented internships at Bharat Intern, tailored for

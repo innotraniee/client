@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import Card from "../components/Card";
 import { Button } from "@/components/ui/button";
+import PingAnimation from "../components/PingAnimation"
 
 const Internship = () => {
   const cards = [
@@ -70,19 +71,21 @@ const Internship = () => {
   ];
   return (
     <>
-      <div className="flex flex-col px-10 md:px-40 my-10 gap-5 justify-center items-center">
-        <h1 className="text-5xl font-semibold self-center">Our Internships</h1>
+      <div className="flex flex-col px-5 md:px-40 my-10 gap-5 justify-center items-center">
+        <h1 className="text-4xl md:text-5xl font-semibold self-center">Our Internships</h1>
         <p className=" self-center text-center max-w-md mb-5">
           We are passionate about technology and believe in the power of
           software to transform the world. Our internship program is just one of
           the ways in which we are investing in the future of the industry.
         </p>
         <div className="flex gap-5">
-          <Link to="/submit-project">
+          <Link to="/submit-project" className="relative">
             <Button>Submit Project</Button>
+            <PingAnimation/>
           </Link>
-          <Link to="/projects">
+          <Link to="/projects" className="relative">
             <Button>Projects link</Button>
+            <PingAnimation/>
           </Link>
         </div>
         <h2 className="text-3xl font-semibold self-center">
@@ -94,8 +97,8 @@ const Internship = () => {
           ))}
         </div>
       </div>
-      <div className="flex flex-col px-10 md:px-40 my-10 gap-5 items-center justify-center">
-        <h1 className="text-4xl font-bold">Why Choose Us?</h1>
+      <div className="flex flex-col px-5 md:px-40 my-10 gap-5 items-center justify-center">
+        <h1 className="text-3xl md:text-4xl font-bold">Why Choose Us?</h1>
         <p className="">
           We bring you the best programs designed to help you succeed in your
           career.

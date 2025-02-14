@@ -11,7 +11,7 @@ export default {
       },
       backgroundImage: {
         "Background-Home":
-          "url('https://static.vecteezy.com/system/resources/previews/010/820/720/original/white-background-random-minimalist-abstract-illustration-for-logo-card-banner-web-and-printing-vector.jpg')",
+          "url('https://static.vecteezy.com/system/resources/previews/007/160/635/non_2x/abstract-3d-design-background-with-technology-dot-and-line-circuit-board-texture-modern-engineering-futuristic-science-communication-concept-illustration-free-vector.jpg')",
       },
       colors: {
         background: "hsl(var(--background))",
