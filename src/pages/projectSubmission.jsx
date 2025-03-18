@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { BaseUrl } from "../../config";
-// import Razorpay from "razorpay";
-import logo from "../innoTraniee.svg";
+import { load } from "@cashfreepayments/cashfree-js";
 
 const ProjectSubmission = () => {
   const [formData, setFormData] = useState({
@@ -17,12 +16,26 @@ const ProjectSubmission = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [cashfree, setCashfree] = useState(null);
   const [formMessage, setFormMessage] = useState(null);
-  // const [isSubmitting, setIsSubmitting] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
+  const initializeSDK = async () => {
+    try {
+      const cf = await load({
+        mode: "production",
+      });
+      setCashfree(cf);
+    } catch (error) {
+      console.error("Failed to load Cashfree SDK:", error);
+    }
+  };
+
   useEffect(() => {
-    // Generate a unique Certificate ID (CId) for the user
+    initializeSDK();
+  }, []);
+
+  useEffect(() => {
     const generateCId = () =>
       `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
     setFormData((prev) => ({ ...prev, cId: generateCId() }));
@@ -32,135 +45,98 @@ const ProjectSubmission = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleArrayChange = (index, value, field) => {
     const updatedArray = [...formData[field]];
     updatedArray[index] = value;
     setFormData((prev) => ({ ...prev, [field]: updatedArray }));
   };
-
-  const handlePayment = async () => {
+  const handlePayment = async (e) => {
+    e.preventDefault();
     setFormMessage(null);
     setErrors({});
-    if (validateForm()) {
-      setIsProcessingPayment(true);
-      try {
-        const response = await fetch(`${BaseUrl}create-order`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
 
-        if (!response.ok) {
-          throw new Error("Failed to create Razorpay order. Please try again.");
-        }
+    if (!validateForm()) {
+      return;
+    }
 
-        const { key, orderId, amount, currency } = await response.json();
+    if (!cashfree) {
+      setFormMessage({
+        type: "error",
+        text: "Payment gateway not initialized. Please refresh and try again.",
+      });
+      return;
+    }
+    setIsProcessingPayment(true);
+    try {
+      console.log("Creating order...");
+      const response = await fetch(`${BaseUrl}create-order`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const responseData = await response.json();
+      if (!response.ok) {
+        console.error("Order creation failed:", responseData);
+        throw new Error(responseData.message || "Failed to create order");
+      }
+      console.log("Order created successfully:");
+      const { orderId, paymentSessionId } = responseData;
 
-        const options = {
-          key_id: key,
-          amount: amount.toString(),
-          currency,
-          name: formData.name,
-          description: "Project Submission Fee",
-          image: logo,
-          order_id: orderId,
-          handler: async (response) => {
-            try {
-              const verifyResponse = await fetch(`${BaseUrl}submit`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  ...formData,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_signature: response.razorpay_signature,
-                }),
-              });
+      if (!paymentSessionId) {
+        throw new Error("Payment session ID is missing");
+      }
 
-              const verifyData = await verifyResponse.json();
+      console.log("Initiating checkout with session ID:");
 
-              if (verifyResponse.ok && verifyData.success) {
-                window.location.href = "/payment/response?status=success";
-              } else {
-                throw new Error(
-                  "Payment verification failed. Please contact support."
-                );
-              }
-            } catch (error) {
+      cashfree
+        .checkout({
+          paymentSessionId: paymentSessionId,
+          redirectTarget: "_modal",
+        })
+        .then(async () => {
+          console.log("Payment successful:");
+          try {
+            const verifyResponse = await fetch(`${BaseUrl}submit`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                ...formData,
+                order_id: orderId,
+              }),
+            });
+            console.log("Verification response status:");
+
+            const verifyData = await verifyResponse.json();
+
+            if (verifyResponse.ok && verifyData.success) {
+              window.location.href = "/payment/response?status=success";
+            } else {
               setFormMessage({
                 type: "error",
-                text:
-                  error.message || "An error occurred while verifying payment.",
+                text: "Payment verification failed. Please contact support.",
               });
+              setIsProcessingPayment(false);
             }
-          },
-          prefill: {
-            name: formData.name,
-            email: formData.email,
-          },
-          notes: {
-            address: "InnoTraniee",
-          },
-          theme: {
-            color: "#3399cc",
-          },
-        };
-
-        const rzp = new window.Razorpay(options);
-
-        rzp.on("payment.failed", function (response) {
-          setFormMessage({
-            type: "error",
-            text: `Payment failed. Reason: ${
-              response.error.description || "Unknown error"
-            }`,
-          });
+          } catch (error) {
+            console.error("Verification error:", error);
+            setFormMessage({
+              type: "error",
+              text: "Error verifying payment. Please contact support.",
+            });
+            setIsProcessingPayment(false);
+          }
         });
-
-        rzp.open();
-      } catch (error) {
-        setFormMessage({
-          type: "error",
-          text: error.message || "An error occurred during payment.",
-        });
-      } finally {
-        setIsProcessingPayment(false);
-      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      setFormMessage({
+        type: "error",
+        text: error.message || "An error occurred during payment.",
+      });
+      setIsProcessingPayment(false);
+    } finally {
+      setIsProcessingPayment(false);
     }
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setFormMessage(null);
-  //   setErrors({});
-  //   if (validateForm()) {
-  //     // setIsSubmitting(true);
-  //     try {
-  //       const response = await fetch(`${BaseUrl}submit`, {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(formData), // Submit form data including CId
-  //       });
-  //       const result = await response.json();
-  //       if (response.ok) {
-  //         setFormMessage({
-  //           type: "success",
-  //           text: "Form submitted successfully!",
-  //         });
-  //       } else {
-  //         setFormMessage({ type: "error", text: result.message });
-  //       }
-  //     } catch {
-  //       setFormMessage({
-  //         type: "error",
-  //         text: "An error occurred. Please try again.",
-  //       });
-  //     } finally {
-  //       setIsSubmitting(false);
-  //     }
-  //   }
-  // };
 
   const validateForm = () => {
     let isValid = true;
@@ -332,33 +308,26 @@ const ProjectSubmission = () => {
         <div>
           <h2 className="text-lg font-medium mt-6">Payment Section</h2>
           <p className="text-sm text-gray-500">
-            Please pay a small amount of Rs 99 to support our employees. and get your certificate.
+            Please pay a small amount of Rs 99 to support our employees. and get
+            your certificate.
           </p>
           <button
             type="button"
-            
             onClick={handlePayment}
             disabled={isProcessingPayment}
             className={`w-full font-medium py-2 rounded mt-4 ${
               isProcessingPayment ? "bg-gray-300" : "bg-blue-600 text-white"
             }`}
           >
-            {isProcessingPayment ? "Processing..." : "Proceed to Payment and Submit"}
+            {isProcessingPayment
+              ? "Processing..."
+              : "Proceed to Payment and Submit"}
           </button>
-          <p className="text-xl">After successful payment please wait for few second to get confirmed...</p>
+          <p className="text-xl">
+            After successful payment please wait for few second to get
+            confirmed...
+          </p>
         </div>
-
-        {/* <div className="text-right">
-          <button
-            type="submit"
-            disabled={isSubmitting || isProcessingPayment}
-            className={`px-6 py-2 bg-green-600 text-white font-bold rounded ${
-              isSubmitting || isProcessingPayment ? "opacity-50" : ""
-            }`}
-          >
-            {isSubmitting ? "Submitting..." : "Submit Form"}
-          </button>
-        </div> */}
       </form>
     </div>
   );
